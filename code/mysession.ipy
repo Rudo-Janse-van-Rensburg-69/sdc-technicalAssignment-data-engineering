@@ -1,0 +1,24 @@
+# coding: utf-8
+import pyspark
+from pyspark.sql import SparkSession, DataFrame
+import pyspark.sql.types as T
+import pyspark.sql.functions as F
+spark = SparkSession.builder.master('local[*]').appName('risk').getOrCreate()
+spark.conf.set('spark.sql.repl.eagerEval.enabled', True)
+df_articles = spark.read.parquet("../datalake/2022-11/2.gzip")
+df_articles.show()
+df_articles.limit(1).show(vertical=True,truncate=False)
+df_articles.select('title','description','content').limit(1).show(vertical=True,truncate=False)
+df_articles\.select('title','description','content').limit(1).show(vertical=True,truncate=False)
+df_articles\.select('title','description','content').limit(1).show(vertical=True,truncate=False)
+df_articles\ .select('title','description','content').limit(1).show(vertical=True,truncate=False)
+df_articles\ .select('title','description','content').limit(1).show(vertical=True,truncate=False)
+df_articles.select('title','description','content').limit(1).show(vertical=True,truncate=False)
+df_articles.select('title','description','content').limit(1).show(vertical=True,truncate=False)
+df_articles.select('title','description','content').withColumn('content',F.decode('content')).limit(1).show(vertical=True,truncate=False)
+df_articles.select('title','description','content').withColumn('content',F.decode('content','UTF-8')).limit(1).show(vertical=True,truncate=False)
+df_articles.select('title','description','content').withColumn('content',F.regexp-extract('content','[.*?]')).limit(1).show(vertical=True,truncate=False)
+df_articles.select('title','description','content').withColumn('content',F.regexp_extract('content','[.*?]')).limit(1).show(vertical=True,truncate=False)
+df_articles.select('title','description','content').withColumn('content',F.regexp_extract('content','[.*?]',0)).limit(1).show(vertical=True,truncate=False)
+%save -r mysession 1-7
+%save -r mysession 1-999
