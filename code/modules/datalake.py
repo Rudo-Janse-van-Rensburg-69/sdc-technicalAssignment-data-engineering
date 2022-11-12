@@ -1,3 +1,4 @@
+import pandas
 from pandas import DataFrame
 from datetime import date
 from pathlib import Path
@@ -26,9 +27,19 @@ class Datalake:
         """
         month_year = dt.strftime("%Y-%m")
         file_exists = os.path.exists(
-                f"../datalake/{str(month_year)}/{week_of_month}.gzip"
+                f"../datalake/raw/{str(month_year)}/{week_of_month}.gzip"
                 )
         return file_exists
+
+    @staticmethod
+    def read_from_datalake(
+            week_of_month: int,
+            dt: date
+            ) -> DataFrame:
+        month_year = dt.strftime("%Y-%m")
+        path = f"../datalake/raw/{str(month_year)}"
+        df_articles = pandas.read_parquet(f"{path}/{week_of_month}.gzip")
+        return df_articles
 
     @staticmethod
     def write_to_datalike(
@@ -47,14 +58,15 @@ class Datalake:
                                       a particular timestamp.
 
         """
+        print("writing articles to datalake...")
         month_year = dt.strftime("%Y-%m")
-        path = f"../datalake/{str(month_year)}"
+        path = f"../datalake/raw/{str(month_year)}"
         Path(path).mkdir(
                 parents=True,
                 exist_ok=True
                 )
         articles.to_parquet(
-                f"{path}/{week_of_month(dt)}.gzip",
+                f"{path}/{week_of_month}.gzip",
                 compression='gzip'
                 )
         articles.to_excel(f"{path}/{week_of_month}.xlsx")
