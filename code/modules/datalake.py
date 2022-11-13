@@ -36,6 +36,18 @@ class Datalake:
             week_of_month: int,
             dt: date
             ) -> DataFrame:
+        """
+        Reads a dataframe from the datalake.
+
+        Parameters:
+            dt (datetime)           : A timestamp for when the articles are
+                                      from.
+            week_of_month (int)     : The week of the month.
+            articles (DataFrame)    : A DataFrame containing articles around
+                                      a particular timestamp.
+        Returns:
+            df_articles (DataFrame) : A dataframe containing articles.
+        """
         month_year = dt.strftime("%Y-%m")
         path = f"../datalake/{str(month_year)}"
         df_articles = pandas.read_parquet(f"{path}/{week_of_month}.gzip")
@@ -56,7 +68,6 @@ class Datalake:
             week_of_month (int)     : The week of the month.
             articles (DataFrame)    : A DataFrame containing articles around
                                       a particular timestamp.
-
         """
         print("writing articles to datalake...")
         month_year = dt.strftime("%Y-%m")

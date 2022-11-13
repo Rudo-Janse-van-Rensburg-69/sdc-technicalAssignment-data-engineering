@@ -159,7 +159,7 @@ def execute(
     """
     df_articles = spark.createDataFrame(data=articles)
     df_articles = df_articles\
-                    .fillna({'author': 'unknown'})\
-                    .withColumn("source", F.lower(F.col("source.name")))
+                .fillna({'author': 'unknown'})\
+                .withColumn("source", F.lower(F.col("source.name")))
     for function in [createAuthor, createSource, createArticle]:
         function(spark=spark, df_articles=df_articles)

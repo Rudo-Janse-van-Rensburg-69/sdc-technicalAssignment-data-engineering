@@ -10,6 +10,15 @@ tokenizer = AutoTokenizer.from_pretrained("t5-small", model_max_length=512)
 
 @F.udf(returnType=T.ArrayType(T.IntegerType()))
 def tokenize_description_input_ids(description: str) -> List[int]:
+    """
+    A user-defined function to tokenize the description column.
+
+    Parameters:
+        description (str)   : an article description.
+
+    Returns:
+        tokens (List[int])  : an array of tokens.
+    """
     return tokenizer(
             description,
             max_length=256,
@@ -17,6 +26,16 @@ def tokenize_description_input_ids(description: str) -> List[int]:
             )['input_ids']
 @F.udf(returnType=T.ArrayType(T.IntegerType()))
 def tokenize_description_attention_mask(description: str) -> List[int]:
+    """
+    A user-defined function to tokenize the description column.
+
+     Parameters:
+        description (str)   : an article description.
+
+    Returns:
+        attention mask (List[int])  : an array of bits.
+
+    """
     return tokenizer(
             description,
             max_length=256,
@@ -26,6 +45,15 @@ def tokenize_description_attention_mask(description: str) -> List[int]:
 
 @F.udf(returnType=T.ArrayType(T.IntegerType()))
 def tokenize_title(title: str) -> List[int]:
+    """
+    A user-defined function to tokenize the title column.
+
+    Parameters:
+        title (str)         : an article description.
+
+    Returns:
+        tokens (List[int])  : an array of tokens.
+    """
     return tokenizer(
             title,
             max_length=128,
@@ -37,7 +65,16 @@ def execute(
         spark: SparkSession,
         articles: List[Dict]
         ) -> DataFrame:
-    print
+    """
+    A function to execute the machine learning pipeline.
+
+    Parameters:
+        spark (SparkSession)    : a spark session.
+        articles (List[Dict])   : a list f article dictionaries.
+
+    Returns:
+        df_articles             : a DataFrame of articles.
+    """
     df_articles = spark.createDataFrame(
                 data=articles
                 ).select(
@@ -59,6 +96,5 @@ def execute(
                         F.col('title')
                     )
                 ).select('title','labels','description','input_ids','attention_mask')
-
     df_articles.limit(3).show(vertical=True, truncate=False)
     return df_articles.toPandas()
