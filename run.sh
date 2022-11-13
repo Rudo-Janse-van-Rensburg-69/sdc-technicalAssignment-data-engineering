@@ -9,9 +9,12 @@ chmod g+rwx "$HOME/.docker" -R
 cd ./docker
 docker-compose up &
 cd ../code
-# Set up virtual environment
-python -m venv env
-source ./env/bin/activate
+# Set up python virtual environment
+#python -m venv env
+source ./bin/activate
 ./bin/pip install -r requirements.txt 
-./bin/python main.py 
-
+for ((; ;))
+do 
+    ./bin/python main.py 
+    sleep 7d
+done
