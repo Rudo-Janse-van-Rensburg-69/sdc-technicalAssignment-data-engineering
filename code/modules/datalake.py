@@ -27,7 +27,7 @@ class Datalake:
         """
         month_year = dt.strftime("%Y-%m")
         file_exists = os.path.exists(
-                f"../datalake/raw/{str(month_year)}/{week_of_month}.gzip"
+                f"../datalake/{str(month_year)}/{week_of_month}.gzip"
                 )
         return file_exists
 
@@ -37,7 +37,7 @@ class Datalake:
             dt: date
             ) -> DataFrame:
         month_year = dt.strftime("%Y-%m")
-        path = f"../datalake/raw/{str(month_year)}"
+        path = f"../datalake/{str(month_year)}"
         df_articles = pandas.read_parquet(f"{path}/{week_of_month}.gzip")
         return df_articles
 
@@ -60,7 +60,7 @@ class Datalake:
         """
         print("writing articles to datalake...")
         month_year = dt.strftime("%Y-%m")
-        path = f"../datalake/raw/{str(month_year)}"
+        path = f"../datalake/{str(month_year)}"
         Path(path).mkdir(
                 parents=True,
                 exist_ok=True
