@@ -1,9 +1,10 @@
 from transformers import pipeline, AutoTokenizer, DataCollatorForSeq2Seq
 from typing import Dict, Tuple, List
 import pyspark
-from pyspark.sql import SparkSession,DataFrame
+from pyspark.sql import SparkSession
 import pyspark.sql.types as T
 import pyspark.sql.functions as F
+from pandas import DataFrame
 
 tokenizer = AutoTokenizer.from_pretrained("t5-small", model_max_length=512)
 
@@ -60,4 +61,4 @@ def execute(
                 ).select('title','labels','description','input_ids','attention_mask')
 
     df_articles.limit(3).show(vertical=True, truncate=False)
-    return df_articles
+    return df_articles.toPandas()

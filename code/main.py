@@ -6,7 +6,9 @@ from datetime import date, timedelta
 from pandas import DataFrame
 from math import ceil
 from pipelines.ml_pipeline import execute as ml_execute
-from pyspark.sql import SparkSession, DataFrame
+from pipelines.analytial_pipeline import execute as analytic_execute
+from pyspark import SQLContext, SparkContext, SparkConf
+from pyspark.sql import SparkSession
 
 newsapi = NewsApiClient(api_key='dccb66a5c9f84d71bcd6b496a27f44a4')
 
@@ -137,16 +139,23 @@ def main():
                 )
     df_articles = Datalake.read_from_datalake(week_of_month=week, dt=today)
     dict_articles = df_articles.to_dict('records')
-
-    spark = SparkSession.builder.master(
-                'local[*]'
-            ).appName(
-                'risk'
-            ).getOrCreate()
-    spark.conf.set('spark.sql.repl.eagerEval.enabled', True)
-
-    ml_execute(spark=spark, articles=dict_articles)
-
+    conf = SparkConf()\
+           .setAppName("PySpark MySql - via JDBC")\
+           .setMaster("local")\
+           .set(
+                "spark.driver.extraClassPath",
+                "mysql-connector-j-8.0.31/mysql-connector-j-8.0.31.jar"
+           )
+    sc = SparkContext(conf=conf)
+    sqlContext = SQLContext(sc)
+    spark = sqlContext.sparkSession
+    analytic_execute(spark=spark, articles=dict_articles)
+    df_articles = ml_execute(spark=spark, articles=dict_articles)
+    Datalake.write_to_datalike(
+        articles=df_articles,
+        week_of_month=week,
+        dt=today
+        )
     # newsapi_pipeline = NewsAPI()
     # newsapi_pipeline.start()
 
