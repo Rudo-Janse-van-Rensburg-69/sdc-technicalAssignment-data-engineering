@@ -1,0 +1,8 @@
+Analytical Users:
+    - intuitively normalised data schema
+    - ability to perform aggregations on a article source and author basis 
+    - query articles for key words 
+
+Machine Learning:
+    - the title and description of the articles can be used as a text summarization dataset
+    - for language models data needs to be tokenized
